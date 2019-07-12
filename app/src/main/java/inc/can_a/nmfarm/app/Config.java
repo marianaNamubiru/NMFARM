@@ -24,4 +24,8 @@ public class Config {
     // id to handle the notification in the notification try
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
+
+    //added this
+    public static final String SHARED_PREF = "can_a_clad_firebase";
+
 }

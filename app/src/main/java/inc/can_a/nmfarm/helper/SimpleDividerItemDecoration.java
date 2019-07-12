@@ -7,11 +7,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import info.androidhive.gcm.R;
+import inc.can_a.nmfarm.R;
 
-/**
- * Created by Lincoln on 30/10/15.
- */
+
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
 

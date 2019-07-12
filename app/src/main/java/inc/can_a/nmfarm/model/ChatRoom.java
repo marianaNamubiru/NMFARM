@@ -1,13 +1,22 @@
 package inc.can_a.nmfarm.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-/**
- * Created by Lincoln on 07/01/16.
- */
-public class ChatRoom implements Serializable {
-    String id, name, lastMessage, timestamp;
-    int unreadCount;
+import com.google.gson.annotations.SerializedName;
+
+public class ChatRoom implements Parcelable {
+    @SerializedName("chat_room_id")
+    String id;
+    @SerializedName("name")
+    String  name;
+    @SerializedName("created_at")
+    String timestamp;
+    @SerializedName("image")
+    String image;
+
+    String lastMessage="";
+    int unreadCount=0;
 
     public ChatRoom() {
     }
@@ -19,6 +28,43 @@ public class ChatRoom implements Serializable {
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
     }
+
+
+    protected ChatRoom(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        timestamp = in.readString();
+        image = in.readString();
+        lastMessage = in.readString();
+        unreadCount = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(timestamp);
+        dest.writeString(image);
+        dest.writeString(lastMessage);
+        dest.writeInt(unreadCount);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ChatRoom> CREATOR = new Creator<ChatRoom>() {
+        @Override
+        public ChatRoom createFromParcel(Parcel in) {
+            return new ChatRoom(in);
+        }
+
+        @Override
+        public ChatRoom[] newArray(int size) {
+            return new ChatRoom[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -58,5 +104,13 @@ public class ChatRoom implements Serializable {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

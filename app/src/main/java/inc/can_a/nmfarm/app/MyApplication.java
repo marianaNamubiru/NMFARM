@@ -1,30 +1,17 @@
 package inc.can_a.nmfarm.app;
 
-/**
- * Created by Lincoln on 14/10/15.
- */
-
 import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import inc.can_a.nmfarm.activity.LoginActivity;
+import inc.can_a.nmfarm.helper.MyPreferenceManager;
 
-import info.androidhive.gcm.activity.LoginActivity;
-import info.androidhive.gcm.helper.MyPreferenceManager;
-
-/**
- * Created by Ravi on 13/05/15.
- */
 
 public class MyApplication extends Application {
 
     public static final String TAG = MyApplication.class
             .getSimpleName();
-
-    private RequestQueue mRequestQueue;
 
     private static MyApplication mInstance;
 
@@ -40,36 +27,12 @@ public class MyApplication extends Application {
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
-        }
-
-        return mRequestQueue;
-    }
-
     public MyPreferenceManager getPrefManager() {
         if (pref == null) {
             pref = new MyPreferenceManager(this);
         }
 
         return pref;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        req.setTag(TAG);
-        getRequestQueue().add(req);
-    }
-
-    public void cancelPendingRequests(Object tag) {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(tag);
-        }
     }
 
     public void logout() {

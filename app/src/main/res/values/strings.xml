@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Google Cloud Messaging</string>
+    <string name="app_name">IDAMA</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="hint_name">Full Name</string>
@@ -8,4 +8,22 @@
     <string name="err_msg_email">Enter valid email address</string>
     <string name="title_activity_chat_room_discussion">ChatRoomDiscussionActivity</string>
     <string name="action_logout">Logout</string>
+    <string name="title_activity_main2">Main</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="sign_in">Sign in</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+    <string name="welcome">Welcome</string>
+    <string name="public_user">Public user</string>
+    <string name="login">Login</string>
+    <string name="address">Manage Addresses</string>
+    <string name="tab_text_1">Home</string>
+    <string name="tab_text_2">Group</string>
+    <string name="tab_text_3">Q &amp; A</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_add_feed">AddFeedActivity</string>
+    <string name="title_activity_add_group">AddGroupActivity</string>
+    <string name="title_activity_add_problem">AddProblemActivity</string>
 </resources>

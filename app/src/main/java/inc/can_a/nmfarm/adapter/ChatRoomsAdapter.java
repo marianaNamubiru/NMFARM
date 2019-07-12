@@ -2,12 +2,16 @@ package inc.can_a.nmfarm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,8 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import info.androidhive.gcm.R;
-import info.androidhive.gcm.model.ChatRoom;
+import inc.can_a.nmfarm.R;
+import inc.can_a.nmfarm.app.EndPoints;
+import inc.can_a.nmfarm.model.ChatRoom;
 
 
 public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.ViewHolder> {
@@ -27,13 +32,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
-
+        ImageView imageView;
         public ViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             message = (TextView) view.findViewById(R.id.message);
             timestamp = (TextView) view.findViewById(R.id.timestamp);
-            count = (TextView) view.findViewById(R.id.count);
+            //count = (TextView) view.findViewById(R.id.count);
+            imageView = view.findViewById(R.id.imageview);
         }
     }
 
@@ -59,14 +65,19 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
         holder.message.setText(chatRoom.getLastMessage());
-        if (chatRoom.getUnreadCount() > 0) {
-            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
-            holder.count.setVisibility(View.VISIBLE);
-        } else {
-            holder.count.setVisibility(View.GONE);
-        }
+//        if (chatRoom.getUnreadCount() > 0) {
+//            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
+//            holder.count.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.count.setVisibility(View.GONE);
+//        }
 
         holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
+
+        if (!TextUtils.isEmpty(chatRoom.getImage())){
+            holder.imageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(EndPoints.IMAGES+chatRoom.getImage()).fitCenter().into(holder.imageView);
+        }
     }
 
     @Override

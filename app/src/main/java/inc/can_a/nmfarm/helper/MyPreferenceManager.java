@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import info.androidhive.gcm.model.User;
+import inc.can_a.nmfarm.model.User;
 
-/**
- * Created by Lincoln on 07/01/16.
- */
+
 public class MyPreferenceManager {
 
     private String TAG = MyPreferenceManager.class.getSimpleName();
@@ -25,13 +23,14 @@ public class MyPreferenceManager {
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // Sharedpref file title
     private static final String PREF_NAME = "androidhive_gcm";
 
     // All Shared Preferences Keys
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_MOBILE = "user_mobile";
     private static final String KEY_NOTIFICATIONS = "notifications";
 
     // Constructor
@@ -46,6 +45,7 @@ public class MyPreferenceManager {
         editor.putString(KEY_USER_ID, user.getId());
         editor.putString(KEY_USER_NAME, user.getName());
         editor.putString(KEY_USER_EMAIL, user.getEmail());
+        editor.putString(KEY_USER_MOBILE, user.getMobile());
         editor.commit();
 
         Log.e(TAG, "User is stored in shared preferences. " + user.getName() + ", " + user.getEmail());
@@ -53,12 +53,13 @@ public class MyPreferenceManager {
 
     public User getUser() {
         if (pref.getString(KEY_USER_ID, null) != null) {
-            String id, name, email;
+            String id, name, email, mobile;
             id = pref.getString(KEY_USER_ID, null);
             name = pref.getString(KEY_USER_NAME, null);
             email = pref.getString(KEY_USER_EMAIL, null);
+            mobile = pref.getString(KEY_USER_EMAIL, null);
 
-            User user = new User(id, name, email);
+            User user = new User(id, name, email,mobile);
             return user;
         }
         return null;

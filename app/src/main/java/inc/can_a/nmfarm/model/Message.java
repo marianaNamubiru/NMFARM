@@ -1,12 +1,22 @@
 package inc.can_a.nmfarm.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
  * Created by Lincoln on 07/01/16.
  */
 public class Message implements Serializable {
-    String id, message, createdAt;
+    @SerializedName("message_id")
+    String id;
+    @SerializedName("message")
+    String message;
+    @SerializedName("image")
+    String image;
+    @SerializedName("created_at")
+    String createdAt;
+    @SerializedName("user")
     User user;
 
     public Message() {
@@ -33,6 +43,14 @@ public class Message implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCreatedAt() {

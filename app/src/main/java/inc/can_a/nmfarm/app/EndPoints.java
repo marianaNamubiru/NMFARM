@@ -6,12 +6,9 @@ package inc.can_a.nmfarm.app;
 public class EndPoints {
 
     // localhost url
-    // public static final String BASE_URL = "http://192.168.0.101/gcm_chat/v1";
-
-    public static final String BASE_URL = "http://172.20.10.2/gcm_chat/v1";
-    public static final String LOGIN = BASE_URL + "/user/login";
-    public static final String USER = BASE_URL + "/user/_ID_";
-    public static final String CHAT_ROOMS = BASE_URL + "/chat_rooms";
-    public static final String CHAT_THREAD = BASE_URL + "/chat_rooms/_ID_";
-    public static final String CHAT_ROOM_MESSAGE = BASE_URL + "/chat_rooms/_ID_/message";
+    //public static final String BASE_URL = "http://192.168.1.219"
+    public static final String BASE_URL = "http://192.168.1.234";
+    //public static final String BASE_URL = "https://www.can-a.technology";
+    //public static final String BASE_URL = "http://192.168.1.219";
+    public static final String IMAGES = BASE_URL + "/nm_farm/images/";
 }

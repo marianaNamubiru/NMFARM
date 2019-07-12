@@ -29,9 +29,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import info.androidhive.gcm.R;
-import info.androidhive.gcm.app.Config;
-import info.androidhive.gcm.app.MyApplication;
+import inc.can_a.nmfarm.R;
+import inc.can_a.nmfarm.app.Config;
+import inc.can_a.nmfarm.app.MyApplication;
 
 
 /**
@@ -55,7 +55,7 @@ public class NotificationUtils {
     }
 
     public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
-        // Check for empty push message
+        // Check for empty push owner
         if (TextUtils.isEmpty(message))
             return;
 

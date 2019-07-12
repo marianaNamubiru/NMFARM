@@ -2,20 +2,92 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="inc.can_a.nmfarm">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+     needed for older devices -
+     used to check app background / foreground status
+    -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <!-- START Added for GCM -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission
+        android:name="inc.can_a.nmfarm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="inc.can_a.nmfarm.permission.C2D_MESSAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- END Added for GCM -->
     <application
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <!--
+        <activity
+            andrtitlename=".activity.LoginActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action andrtitlename="android.intent.action.MAIN" />
+
+                <category andrtitlename="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        -->
+        <activity
+            android:name=".activity.ChatRoomActivity"
+            android:label="@string/title_activity_chat_room_discussion"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+
+        <!-- END Added for GCM -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="NM farmers" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.GroupMembersActivity"
+            android:parentActivityName=".activity.GroupMembersActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="Register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddFeedActivity"
+            android:label="@string/title_activity_add_feed"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddGroupActivity"
+            android:label="@string/title_activity_add_group"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddProblemActivity"
+            android:label="@string/title_activity_add_problem"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

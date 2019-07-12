@@ -1,7 +1,10 @@
 package inc.can_a.nmfarm.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,31 +16,31 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import info.androidhive.gcm.R;
-import info.androidhive.gcm.app.EndPoints;
-import info.androidhive.gcm.app.MyApplication;
-import info.androidhive.gcm.model.User;
+import inc.can_a.nmfarm.R;
+import inc.can_a.nmfarm.app.ApiClient;
+import inc.can_a.nmfarm.app.ApiInterface;
+import inc.can_a.nmfarm.app.MyApplication;
+import inc.can_a.nmfarm.model.ErrorMsgResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class LoginActivity extends AppCompatActivity {
 
     private String TAG = LoginActivity.class.getSimpleName();
-    private EditText inputName, inputEmail;
-    private TextInputLayout inputLayoutName, inputLayoutEmail;
-    private Button btnEnter;
+
+    private EditText inputMobile,inputEmail, inputPassword;
+    private TextView forgot_pwd,mToggleEmailMobile;
+    private TextInputLayout inputLayoutMobile,inputLayoutEmail, inputLayoutPassword;
+    private Button btnLogin,btnLinkToRegister;
+    LinearLayout mLayoutMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,36 +51,57 @@ public class LoginActivity extends AppCompatActivity {
          * redirect him to main activity
          * */
         if (MyApplication.getInstance().getPrefManager().getUser() != null) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, Main2Activity.class));
             finish();
         }
 
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_name);
-        inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
-        inputName = (EditText) findViewById(R.id.input_name);
-        inputEmail = (EditText) findViewById(R.id.input_email);
-        btnEnter = (Button) findViewById(R.id.btn_enter);
+        toolbar.setTitle(getTitle());
 
-        inputName.addTextChangedListener(new MyTextWatcher(inputName));
-        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
+        inputLayoutMobile = findViewById(R.id.input_layout_phone);
 
-        btnEnter.setOnClickListener(new View.OnClickListener() {
+        mLayoutMobile = findViewById(R.id.input_layout_phone);
+
+        inputLayoutMobile = findViewById(R.id.input_layout_phone);
+        inputLayoutEmail = findViewById(R.id.input_layout_email);
+        inputLayoutPassword = findViewById(R.id.input_layout_password);
+
+        inputMobile = findViewById(R.id.input_phone);
+        inputEmail = findViewById(R.id.input_email);
+        inputPassword = findViewById(R.id.input_password);
+
+        mToggleEmailMobile = findViewById(R.id.toggle_btn_email_n_mobil);
+        btnLogin = findViewById(R.id.btn_login);
+        btnLinkToRegister = findViewById(R.id.link_to_register_btn);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login();
+
+            }
+        });
+
+        // Link to Register Screen
+        btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                // Use the Builder class for convenient dialog construction
+                Intent in = new Intent(getApplicationContext(),RegisterActivity.class);
+                startActivity(in);
+                finish();
+
             }
         });
     }
 
     /**
-     * logging in user. Will make http post request with name, email
+     * logging in user. Will make http post request with title, email
      * as parameters
      */
-    private void login() {
+    /**    private void login() {
         if (!validateName()) {
             return;
         }
@@ -86,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        final String name = inputName.getText().toString();
+        final String title = inputName.getText().toString();
         final String email = inputEmail.getText().toString();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -104,20 +128,21 @@ public class LoginActivity extends AppCompatActivity {
                         // user successfully logged in
 
                         JSONObject userObj = obj.getJSONObject("user");
-                        User user = new User(userObj.getString("user_id"),
-                                userObj.getString("name"),
+                        User user = new User(
+                                userObj.getString("user_id"),
+                                userObj.getString("title"),
                                 userObj.getString("email"));
 
                         // storing user in shared preferences
                         MyApplication.getInstance().getPrefManager().storeUser(user);
 
                         // start main activity
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TopicsActivity.class));
                         finish();
 
                     } else {
-                        // login error - simply toast the message
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        // login error - simply toast the owner
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("owner"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
@@ -138,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("name", name);
+                params.put("title", title);
                 params.put("email", email);
 
                 Log.e(TAG, "params: " + params.toString());
@@ -148,6 +173,67 @@ public class LoginActivity extends AppCompatActivity {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
+    }*/
+    private void login() {
+
+//        if (!validateEmail()) {
+//            return;
+//        }
+
+        final String mobile = inputMobile.getText().toString();
+        final String email = inputEmail.getText().toString();
+        final String password = inputPassword.getText().toString();
+
+        //mSwipeRefreshLayout.setRefreshing(true);
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile", mobile);
+        params.put("email", email);
+        params.put("password", password);
+
+        Call<ErrorMsgResponse> call = apiService.login(params);
+        call.enqueue(new Callback<ErrorMsgResponse>() {
+
+            @Override
+            public void onResponse(@NonNull Call<ErrorMsgResponse> call, @NonNull retrofit2.Response<ErrorMsgResponse> response) {
+                Log.e(TAG, "onResponse: "+response );
+                try{
+                    if(response.isSuccessful()){
+                        //mSwipeRefreshLayout.setRefreshing(false);
+                        // storing user in shared preferences
+                        MyApplication.getInstance().getPrefManager().storeUser(response.body().getUser());
+                        Log.e(TAG, "onResponse: error returned false"+response.body() );
+                        // start main activity
+                        startActivity(new Intent(getApplicationContext(), Main2Activity.class));
+                        finish();
+
+                    }else {
+                        //mSwipeRefreshLayout.setRefreshing(false);
+                        Log.e(TAG, "onResponse: error returned true" );
+                        Toast.makeText(getApplicationContext(), "" + response.body().getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                }catch(NullPointerException n){
+                    Log.e(TAG, "onResponse: Exception "+n );
+
+                    //mSwipeRefreshLayout.setRefreshing(false);
+                   /* if (response.body().getMessage().equals("No Results")){
+                        no_ads_for_me.setVisibility(View.VISIBLE);
+                        no_ads_for_me.setText("No vehicles Available");
+                        recyclerView.setVisibility(View.GONE);
+                    }*/
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorMsgResponse>call, Throwable t) {
+                //mSwipeRefreshLayout.setRefreshing(false);
+                Log.e(TAG, "onResponse: on failure  "+t.getMessage() );
+
+            }
+        });
     }
 
     private void requestFocus(View view) {
@@ -156,18 +242,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Validating name
-    private boolean validateName() {
-        if (inputName.getText().toString().trim().isEmpty()) {
-            inputLayoutName.setError(getString(R.string.err_msg_name));
-            requestFocus(inputName);
-            return false;
-        } else {
-            inputLayoutName.setErrorEnabled(false);
-        }
-
-        return true;
-    }
 
     // Validating email
     private boolean validateEmail() {
@@ -186,31 +260,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_name:
-                    validateName();
-                    break;
-                case R.id.input_email:
-                    validateEmail();
-                    break;
-            }
-        }
     }
 
 }

@@ -2,10 +2,15 @@ package inc.can_a.nmfarm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,8 +18,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import info.androidhive.gcm.R;
-import info.androidhive.gcm.model.Message;
+import inc.can_a.nmfarm.R;
+import inc.can_a.nmfarm.app.EndPoints;
+import inc.can_a.nmfarm.model.Message;
 
 public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -29,11 +35,13 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView message, timestamp;
+        ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
-            message = (TextView) itemView.findViewById(R.id.message);
-            timestamp = (TextView) itemView.findViewById(R.id.timestamp);
+            imageView = itemView.findViewById(R.id.image);
+            message = itemView.findViewById(R.id.created_by);
+            timestamp = itemView.findViewById(R.id.timestamp);
         }
     }
 
@@ -51,14 +59,14 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
 
-        // view type is to identify where to render the chat message
+        // view type is to identify where to render the chat owner
         // left or right
         if (viewType == SELF) {
-            // self message
+            // self owner
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_self, parent, false);
         } else {
-            // others message
+            // others owner
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_other, parent, false);
         }
@@ -83,12 +91,19 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Message message = messageArrayList.get(position);
         ((ViewHolder) holder).message.setText(message.getMessage());
 
+        Log.e(TAG, "onBindViewHolder: "+message.getMessage() );
         String timestamp = getTimeStamp(message.getCreatedAt());
 
         if (message.getUser().getName() != null)
             timestamp = message.getUser().getName() + ", " + timestamp;
 
         ((ViewHolder) holder).timestamp.setText(timestamp);
+
+        if (!TextUtils.isEmpty(message.getImage())){
+            ((ViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(EndPoints.IMAGES+message.getImage()).fitCenter().into(((ViewHolder) holder).imageView);
+        }
+
     }
 
     @Override
@@ -115,5 +130,6 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         return timestamp;
     }
+
 }
 
