@@ -1,5 +1,6 @@
 package inc.can_a.nmfarm.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -98,6 +99,8 @@ public class Main2Activity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(),MainSearchActivity.class);
+            startActivity(intent);
             return true;
         }else if (id == R.id.action_login) {
             if (MyApplication.getInstance().getPrefManager().getUser()!=null){
@@ -174,6 +177,7 @@ public class Main2Activity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onCancel(DialogInterface dialog) {
                 fab.setVisibility(View.VISIBLE);

@@ -26,11 +26,12 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
     private static String today;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
+        public TextView name,activity;
         ImageView imageView;
         public ViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.name);
+            name = view.findViewById(R.id.name);
+            activity = view.findViewById(R.id.activity);
             imageView = view.findViewById(R.id.imageview);
         }
     }
@@ -54,14 +55,8 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         GroupMember groupMember = groupMembers.get(position);
         holder.name.setText(groupMember.getName());
+        holder.activity.setText(groupMember.getActivity());
 
-        //Todo add the profile
-        /*if (!TextUtils.isEmpty(chatRoom.getImage())){
-            holder.imageView.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(EndPoints.IMAGES+chatRoom.getImage()).circleCrop().into(holder.imageView);
-        }else {
-            Glide.with(mContext).load(EndPoints.IMAGES+"default.jpg").circleCrop().into(holder.imageView);
-        }*/
         Glide.with(mContext).load(EndPoints.IMAGES+"default.jpg").circleCrop().into(holder.imageView);
     }
 
@@ -70,52 +65,4 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
         return groupMembers.size();
     }
 
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
 }

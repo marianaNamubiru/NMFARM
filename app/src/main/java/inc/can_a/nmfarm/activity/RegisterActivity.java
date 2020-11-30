@@ -30,7 +30,7 @@ import retrofit2.Callback;
 public class RegisterActivity extends AppCompatActivity {
 
     private String TAG = RegisterActivity.class.getSimpleName();
-    private EditText inputName, inputEmail, inputPassword;
+    private EditText inputName, inputEmail, inputPassword, inputActivity;
     private TextInputLayout inputLayoutName, inputLayoutEmail, inputLayoutPassword;
     private Button btnEnter;
 
@@ -54,14 +54,15 @@ public class RegisterActivity extends AppCompatActivity {
         toolbar.setTitle(getTitle());
 
         inputLayoutName = findViewById(R.id.input_layout_name);
-        inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
-        inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
+        inputLayoutEmail =  findViewById(R.id.input_layout_email);
+        inputLayoutPassword =  findViewById(R.id.input_layout_password);
 
-        inputName = (EditText) findViewById(R.id.input_name);
-        inputEmail = (EditText) findViewById(R.id.input_email);
-        inputPassword = (EditText) findViewById(R.id.input_password);
+        inputName = findViewById(R.id.input_name);
+        inputEmail = findViewById(R.id.input_email);
+        inputPassword = findViewById(R.id.input_password);
+        inputActivity = findViewById(R.id.input_activity);
 
-        btnEnter = (Button) findViewById(R.id.btn_enter);
+        btnEnter = findViewById(R.id.btn_enter);
 
         inputName.addTextChangedListener(new MyTextWatcher(inputName));
         inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
@@ -165,6 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String name = inputName.getText().toString();
         final String email = inputEmail.getText().toString();
         final String password = inputPassword.getText().toString();
+        final String activity = inputActivity.getText().toString();
 
         //mSwipeRefreshLayout.setRefreshing(true);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -173,8 +175,9 @@ public class RegisterActivity extends AppCompatActivity {
         params.put("name", name);
         params.put("email", email);
         params.put("password", password);
+        params.put("activities", activity);
 
-        Call<ErrorMsgResponse> call = apiService.login(params);
+        Call<ErrorMsgResponse> call = apiService.register(params);
         call.enqueue(new Callback<ErrorMsgResponse>() {
 
             @Override

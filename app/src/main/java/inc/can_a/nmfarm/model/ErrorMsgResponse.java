@@ -17,7 +17,7 @@ public class ErrorMsgResponse {
         private ArrayList<Message> messages;
         @SerializedName("chat_room")
         private ChatRoom chatRoom;
-        @SerializedName("owner")
+        @SerializedName("message")
         private Message messageObj;
         @SerializedName("user")
         private User user;

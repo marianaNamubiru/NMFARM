@@ -13,6 +13,8 @@ public class GroupMember implements Parcelable {
     String  name;
     @SerializedName("email")
     String  email;
+    @SerializedName("activity")
+    String  activity;
 
     public GroupMember(String gid, String name, String email, String created_on) {
 
@@ -26,6 +28,7 @@ public class GroupMember implements Parcelable {
         gid = in.readString();
         name = in.readString();
         email = in.readString();
+        activity = in.readString();
     }
 
     @Override
@@ -33,6 +36,7 @@ public class GroupMember implements Parcelable {
         dest.writeString(gid);
         dest.writeString(name);
         dest.writeString(email);
+        dest.writeString(activity);
     }
 
     @Override
@@ -74,5 +78,13 @@ public class GroupMember implements Parcelable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
     }
 }

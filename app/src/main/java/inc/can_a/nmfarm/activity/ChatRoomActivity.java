@@ -137,7 +137,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 final String message = inputMessage.getText().toString().trim();
 
                 if (TextUtils.isEmpty(message)) {
-                    Toast.makeText(getApplicationContext(), "Enter a owner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Enter a message", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(MyApplication.getInstance().getPrefManager().getUser()!=null){
@@ -211,7 +211,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                 //on getting result if we are looking for bitmap two then set it
                 //Getting the Bitmap from Gallery
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
 
                 final Dialog dialog = new Dialog(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.cardview_dark_background)));
@@ -551,6 +550,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                         //Log.e(TAG, "onResponse: arraylist "+chatRoomArrayList );
                         Message msg = response.body().getMessageObj();
                         User user = response.body().getUser();
+                        Log.e(TAG, "onResponse: msg is "+msg.getMessage() );
+                        Log.e(TAG, "onResponse: user is "+user.getName() );
                         msg.setUser(user);
                         messageArrayList.add(msg);
                         mAdapter.notifyDataSetChanged();

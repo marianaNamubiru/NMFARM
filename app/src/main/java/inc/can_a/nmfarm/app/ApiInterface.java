@@ -27,17 +27,23 @@ public interface ApiInterface {
     @POST("nm_farm/v1/login")
     Call<ErrorMsgResponse> login(@FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("nm_farm/v1/user/register")
+    Call<ErrorMsgResponse> register(@FieldMap Map<String, String> params);
+
     @GET("nm_farm/v1/chat_rooms")
     Call<ErrorMsgResponse> fetchChatRooms();
 
     @GET("nm_farm/v1/feeds")
     Call<ErrorMsgResponse> fetchFeeds();
 
-    @GET("nm_farm/v1/groups")
-    Call<ErrorMsgResponse> fetchGroups();
+    @FormUrlEncoded
+    @POST("nm_farm/v1/groups")
+    Call<ErrorMsgResponse> fetchGroups(@FieldMap Map<String, String> params);
 
     @GET("nm_farm/v1/groups/{id}")
     Call<ErrorMsgResponse> fetchGroupMembers(@Path("id") String id);
+
 
     @GET("nm_farm/v1/chat_rooms/{id}")
     Call<ErrorMsgResponse> fetchChatThread(@Path("id") String id);
@@ -47,6 +53,12 @@ public interface ApiInterface {
     Call<ErrorMsgResponse> sendMessage(
             @Path("id") String id,
             @Part MultipartBody.Part parts,
+            @PartMap Map<String, RequestBody> params);
+
+    @Multipart
+    @POST("nm_farm/v1/join/{id}/group")
+    Call<ErrorMsgResponse> joinGroup(
+            @Path("id") String id,
             @PartMap Map<String, RequestBody> params);
 
     @FormUrlEncoded

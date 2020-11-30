@@ -46,11 +46,7 @@ public class Q_and_A_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //phoneRepairRequestArrayList = new ArrayList<>();
 
-        /*if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }*/
     }
 
     @Override

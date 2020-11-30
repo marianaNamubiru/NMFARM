@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,24 +34,42 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     private Context mContext;
     private ArrayList<Group> chatRoomArrayList;
     private static String today;
+    private GroupAdapterListener listner;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, owner, timestamp, join;
+        public TextView title, owner, timestamp;
+        Button chat, join;
         ImageView imageView;
         public ViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            owner = (TextView) view.findViewById(R.id.created_by);
-            timestamp = (TextView) view.findViewById(R.id.timestamp);
-            join = (TextView) view.findViewById(R.id.join);
+            title = view.findViewById(R.id.title);
+            owner = view.findViewById(R.id.created_by);
+            timestamp = view.findViewById(R.id.timestamp);
+            chat = view.findViewById(R.id.chat);
+            join = view.findViewById(R.id.join);
             imageView = view.findViewById(R.id.imageview);
+
+            chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listner.onChatPressed(chatRoomArrayList.get(getAdapterPosition()));
+                }
+            });
+
+            join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listner.onJoinPressed(chatRoomArrayList.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
 
-    public GroupsAdapter(Context mContext, ArrayList<Group> chatRoomArrayList) {
+    public GroupsAdapter(Context mContext, ArrayList<Group> chatRoomArrayList, GroupAdapterListener listner) {
         this.mContext = mContext;
         this.chatRoomArrayList = chatRoomArrayList;
+        this.listner = listner;
 
         Calendar calendar = Calendar.getInstance();
         today = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
@@ -74,8 +93,10 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             String selfUserId = MyApplication.getInstance().getPrefManager().getUser().getId();
             Log.e(TAG, "onBindViewHolder: my user id is "+selfUserId );
             //Todo also if not member of group is check in fg and if not exist then return that field too
-            if (chatRoom.getOwner_id().equals(selfUserId)){
-                holder.join.setVisibility(View.GONE);
+            if (chatRoom.getOwner_id().equals(selfUserId) || chatRoom.isMember() ){
+                //holder.join.setVisibility(View.GONE);
+                holder.join.setText("Member");
+                //Todo or if u are a group member
             }
         }
 
@@ -112,6 +133,11 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         }
 
         return timestamp;
+    }
+
+    public interface GroupAdapterListener {
+        void onChatPressed(Group group);
+        void onJoinPressed(Group group);
     }
 
     public interface ClickListener {

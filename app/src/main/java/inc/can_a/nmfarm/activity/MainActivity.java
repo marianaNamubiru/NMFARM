@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 break;
 //                            case R.id.settings:
-//                                in = new Intent(getApplicationContext(),ActivitySetting.class);
+//                                in = new Intent(getApplicationContext(),MainSearchActivity.class);
 //                                startActivity(in);
 //                                break;
-//
+////
 //                            case R.id.about:
 //                                in = new Intent(getApplicationContext(),AboutUs.class);
 //                                startActivity(in);
